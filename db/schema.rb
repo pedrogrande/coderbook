@@ -11,7 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131102005506) do
+ActiveRecord::Schema.define(version: 20131102052401) do
+
+  create_table "groups", force: true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "owner"
+  end
+
+  create_table "posts", force: true do |t|
+    t.text     "body"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id"
+
+  create_table "rails_admin_histories", force: true do |t|
+    t.text     "message"
+    t.string   "username"
+    t.integer  "item"
+    t.string   "table"
+    t.integer  "month",      limit: 2
+    t.integer  "year",       limit: 5
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories"
 
   create_table "roles", force: true do |t|
     t.string   "name"
@@ -23,6 +53,26 @@ ActiveRecord::Schema.define(version: 20131102005506) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], name: "index_roles_on_name"
+
+  create_table "user_groups", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_groups", ["group_id"], name: "index_user_groups_on_group_id"
+  add_index "user_groups", ["user_id"], name: "index_user_groups_on_user_id"
+
+  create_table "user_profiles", force: true do |t|
+    t.integer  "user_id"
+    t.string   "profile_pic"
+    t.text     "hobbies"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "user_profiles", ["user_id"], name: "index_user_profiles_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
